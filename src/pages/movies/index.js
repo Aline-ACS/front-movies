@@ -34,25 +34,29 @@ const Movies = () => {
   async function handleMovie(e) {
     e.preventDefault();
 
-    await api
-      .post(
-        '/movies',
-        { name, watched, type, duration, user_uid },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('tokenAuth')}`,
-          },
-        }
-      )
-      .then((response) => {
-        setMovies([...movies, response.data.movie]);
-        alert('Filme cadatsrado com sucesso!!');
-      })
-      .catch((error) => alert('Erro ao cadastrar filme.', error));
-    setName('');
-    setWatched(false);
-    setType('');
-    setDuration('');
+    if (!name || !type || !duration) {
+      alert('Preencha todos os campos!');
+    } else {
+      await api
+        .post(
+          '/movies',
+          { name, watched, type, duration, user_uid },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('tokenAuth')}`,
+            },
+          }
+        )
+        .then((response) => {
+          setMovies([...movies, response.data.movie]);
+          alert('Filme cadastrado com sucesso!!');
+        })
+        .catch((error) => alert('Erro ao cadastrar filme.', error));
+      setName('');
+      setWatched(false);
+      setType('');
+      setDuration('');
+    }
   }
 
   return (
